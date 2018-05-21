@@ -1,0 +1,129 @@
+<section class="todoapp">
+  <header class="header">
+    <h1>{{pageName}}</h1>
+
+    <form (submit)="appendItem(newTodoInput.value); newTodoInput.value=''">
+          <!-- ceci est la balise input officielle
+          on a donc le submit
+          ensuite on veut qu'apres faire entree , ca efface, donc cest la deuxième-->
+
+      <input  #newTodoInput
+              name        = "newTodoInput"
+              class       = "new-todo"
+              id="barreEntree"
+              placeholder = "Que faire?"
+              autofocus />
+    </form>
+  </header>
+
+  <section class="main">
+    <input  class="toggle-all"
+            type="checkbox"
+            name="toggleAll"
+            [ngModel]="isAllDone()"
+            (ngModelChange)="toggleAllDone()"
+    />
+    <!-- Les deux lignes de codes ngModel sont la pour rendre interractif
+     la petites fleches pour tout selctionner a-->
+
+    <ul class="todo-list">
+      <!-- Ici c'est l'affichage officielle des valeur entrée. Sachant que en bas, c'était juste un exemple de ce qu'on voulais faire
+      donc on apllique a peut près la même chose dans les balises li. Toutefois, c'est tou lié, càa dir quand on ajoute
+      quelque chose en haut, ca ajoute aussi en bas-->
+
+      <li *ngFor="let item of getFilteredItems()"
+          [class.editing]="compoItem.isEditing">
+
+
+      <!-- compoItem est un booleen. Quand il vaut vrai, la balise i prend la classe isEditing et sinon il ne prend pas  -->
+
+        <app-todo-item #compoItem
+                       [data]="item"
+        ></app-todo-item>
+        <!-- veut dire que notre composant app to do item attend un attribue data
+        et la balise app-to do-item se trouve dans la page  to do item components-->
+
+      </li>
+    </ul>
+  </section>
+
+<!-- Dedans, on a rajouter des appels vers des fonctions
+ Les fonctions sont définis dans le to dolist-components.ts -->
+  <footer class="footer">
+  <span class="todo-count"><strong></strong>{{NbItemsUnchecked()}} restantes</span>
+
+  <ul class="filters">
+    <li>
+      <label id="inputFile">Insérer un fichier
+        <input type="file"
+               name="file"
+               id="buttonFile"
+               (change)="getFiles($event)">
+      </label>
+    </li>
+    <li class="undoRedo" ngFor="let item of getItems()">
+      <button [disabled]="tableauIntermediaire == null" (click)="undo()">Annuler</button>
+      <button [disabled]="tableauIntermediaire==null" (click)="redo()">Rétablir</button>
+    </li>
+    <li>
+      <a class="filterAll" (click)="currentFilter=filterAll" [class.selected]="currentFilter===filterAll">Tous</a>
+    </li>
+
+    <li>
+      <a class="filterActives" (click)="currentFilter=filterUnDone" [class.selected]="currentFilter===filterUnDone">Actifs</a>
+    </li>
+
+    <li>
+      <a class="filterCompleted" (click)="currentFilter = filterDone" [class.selected]="currentFilter===filterDone">Complétés</a>
+    </li>
+
+  </ul>
+  <span>
+    <button class="clear-completed" (click)="removeDone()">Supprimer cochées</button>
+  </span>
+</footer>
+</section>
+<hr/>
+<hr/>
+
+
+
+
+
+<!--##############################################################################################################################-->
+<!-- Tout ce qui suit contient un formulaire de type text
+on va pouvoir entrer un text (string)
+et on va pouvoir l'ajouter à list avec la méthode appendItem
+la méthode appendItem si trouve lui dans la page to do-list.component.ts en dernier position-->
+<!--
+<h1>{{pageName}}</h1>
+
+<form (submit)="appendItem(newItemText.value)">
+    <input type="text" #newItemText/>
+          <!-- le # est utilisé pour nomer la balise. Pour avoir la référence -->
+  <!-- le but recuperer la valeur de cette balise input -->
+<!--
+</form>
+-->
+
+
+<!--
+<ul>
+  <li *ngFor="let item of getItems()">  <!--/achaque fois qu'on a *, on sait que ca va modifier des balise di DOM-->
+    <!-- {{item | json}} -->
+<!--
+    <input type="checkbox"
+           [ngModel]="item.isDone"
+           (ngModelChange)="setItemDone(item, $event)">
+    <!-- on veut dire qu'il represent une infromation avec ngModel. Les [] veut dire je tranmet de l'info-->
+    <!-- () veut dire que ca emet un évenement quand il click dessus-->
+<!--
+    <label>{{item.label}}</label>
+    <button (click)="removeItem(item)">DELETE</button>
+    <!-- la fonction remove item se trouve dans to do-listcomponent.ts -->
+<!--
+  </li>
+</ul>
+
+-->
+

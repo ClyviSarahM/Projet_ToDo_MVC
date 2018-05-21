@@ -1,0 +1,45 @@
+<div class="view">
+  <input 	class			= "toggle"
+          type			= "checkbox"
+          name			= "fait"
+          [ngModel]="getIsDone()"
+          (ngModelChange) = "setIsDone($event)"
+  />
+
+  <label 	class="texte"
+          (dblclick)="isEditing = true"
+  >{{getLabel()}}</label>
+  <!-- on veut que quand on clicke dessus deux fois, ca initialise isEditing
+   qui se trouve dans to do-components.ts, as true -->
+
+  <button class="destroy"
+          (click)="deleteTask()"></button>
+
+</div>
+<section>
+  <script>
+    window.onkeypress = listenToKeyPressed;
+
+    function listenToKeyPressed(e) {
+      if (e.ctrlKey){
+        if (e.charCode === 122)
+          undo();
+
+        if (e.charCode === 121)
+          redo();
+      }
+    }
+  </script>
+</section>
+
+<!-- ce bout de code qui suit s'affiche quuand on a rajouter un item -->
+<form (submit)="setLabel(newTextInput.value)">
+
+  <input  #newTextInput
+          name    = "newTextInput"
+          class   = "edit"
+          (blur)="setLabel(newTextInput.value)"
+          [ngModel] = "getLabel()"
+  />
+
+</form>
